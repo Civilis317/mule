@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:ws="http://www.mulesoft.org/schema/mule/ws" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+<mule xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:ws="http://www.mulesoft.org/schema/mule/ws" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ws http://www.mulesoft.org/schema/mule/ws/current/mule-ws.xsd
-http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd">
+http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd">
     <http:listener-config name="HTTP_Listener_Configuration" host="localhost" port="8084" basePath="countrySvc" doc:name="HTTP Listener Configuration"/>
     <ws:consumer-config name="Web_Service_Consumer" wsdlLocation="http://localhost:8080/ws?wsdl" service="CountriesPortService" port="CountriesPortSoap11" serviceAddress="http://Asgard.local:8080/" doc:name="Web Service Consumer"/>
     <flow name="countryproxyFlow">
@@ -15,6 +16,9 @@ http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/
         <logger message="#[message.inboundProperties.'http.query.params'.name]" level="INFO" doc:name="Logger"/>
         <set-payload value="&lt;payload&gt;&lt;country&gt;#[message.inboundProperties.'http.query.params'.name]&lt;/country&gt;&lt;/payload&gt;
 " doc:name="Set Payload"/>
+        <response>
+            <json:xml-to-json-transformer doc:name="XML to JSON" metadata:id="a587bbbd-6d03-4bf5-8b70-10de4e27d87f"/>
+        </response>
         <response>
             <ws:consumer config-ref="Web_Service_Consumer" operation="getCountry" doc:name="Web Service Consumer"/>
         </response>
