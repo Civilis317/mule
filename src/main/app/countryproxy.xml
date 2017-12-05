@@ -17,7 +17,10 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
         <set-payload value="&lt;payload&gt;&lt;country&gt;#[message.inboundProperties.'http.query.params'.name]&lt;/country&gt;&lt;/payload&gt;
 " doc:name="Set Payload"/>
         <response>
-            <json:xml-to-json-transformer doc:name="XML to JSON" metadata:id="a587bbbd-6d03-4bf5-8b70-10de4e27d87f"/>
+            <json:xml-to-json-transformer doc:name="XML to JSON"/>
+        </response>
+        <response>
+            <mulexml:xslt-transformer xsl-file="/Users/civilis/Data/BOIP/playground/examples/countryproxy/src/main/resources/CountryResponseTransformer.xslt" maxIdleTransformers="2" maxActiveTransformers="5" doc:name="XSLT"/>
         </response>
         <response>
             <ws:consumer config-ref="Web_Service_Consumer" operation="getCountry" doc:name="Web Service Consumer"/>
