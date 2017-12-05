@@ -13,7 +13,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     <ws:consumer-config name="Web_Service_Consumer" wsdlLocation="http://localhost:8080/ws?wsdl" service="CountriesPortService" port="CountriesPortSoap11" serviceAddress="http://Asgard.local:8080/" doc:name="Web Service Consumer"/>
     <flow name="countryproxyFlow">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/" doc:name="HTTP"/>
-        <logger message="#[message.inboundProperties.'http.query.params'.name]" level="INFO" doc:name="Logger"/>
+        <logger message="&quot;Incoming parameter: &quot; + #[message.inboundProperties.'http.query.params'.name]" level="INFO" doc:name="Logger"/>
         <set-payload value="&lt;payload&gt;&lt;country&gt;#[message.inboundProperties.'http.query.params'.name]&lt;/country&gt;&lt;/payload&gt;
 " doc:name="Set Payload"/>
         <response>
