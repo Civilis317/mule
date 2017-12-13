@@ -9,7 +9,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/ws http://www.mulesoft.org/schema/mule/ws/current/mule-ws.xsd
 http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
 http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd">
-    <http:listener-config name="HTTP_Listener_Configuration" host="localhost" port="${httpPort}" basePath="countrySvc" doc:name="HTTP Listener Configuration"/>
+    <http:listener-config name="HTTP_Listener_Configuration" host="localhost" port="${httpPort}" basePath="${basePath}" doc:name="HTTP Listener Configuration"/>
     <ws:consumer-config name="Web_Service_Consumer" wsdlLocation="${ws.wsdl.location}" service="${ws.service}" port="${ws.port}" serviceAddress="${ws.soap.address}" doc:name="Web Service Consumer"/>
     <flow name="countryproxyFlow">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/" doc:name="HTTP"/>
@@ -20,13 +20,13 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
             <json:xml-to-json-transformer doc:name="XML payload to JSON"/>
         </response>
         <response>
-            <mulexml:xslt-transformer xsl-file="/Users/civilis/Data/BOIP/playground/examples/countryproxy/src/main/resources/CountryResponseTransformer.xslt" maxIdleTransformers="2" maxActiveTransformers="5" doc:name="XSLT: SOAP Response into clean XML"/>
+            <mulexml:xslt-transformer xsl-file="CountryResponseTransformer.xslt" maxIdleTransformers="2" maxActiveTransformers="5" doc:name="XSLT: SOAP Response into clean XML"/>
         </response>
         <response>
             <ws:consumer config-ref="Web_Service_Consumer" operation="${ws.operation}" doc:name="Web Service Consumer"/>
         </response>
         <response>
-            <mulexml:xslt-transformer xsl-file="/Users/civilis/Data/BOIP/playground/examples/countryproxy/src/main/resources/countryProxy.xslt" maxIdleTransformers="2" maxActiveTransformers="5" doc:name="XSLT: transform xml payload to CountryService SOAP Request">
+            <mulexml:xslt-transformer xsl-file="countryProxy.xslt" maxIdleTransformers="2" maxActiveTransformers="5" doc:name="XSLT: transform xml payload to CountryService SOAP Request">
                 <mulexml:context-property key="countryName" value="#[message.inboundProperties.'http.query.params'.name]"/>
             </mulexml:xslt-transformer>
         </response>

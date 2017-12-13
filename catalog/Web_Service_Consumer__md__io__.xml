@@ -3,6 +3,15 @@
   <connectorName>Web_Service_Consumer</connectorName>
   <metadataIo class="tree-map">
     <entry>
+      <string>${ws.operation}</string>
+      <map>
+        <entry>
+          <string>__default__</string>
+          <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry/>
+        </entry>
+      </map>
+    </entry>
+    <entry>
       <string>getCountry</string>
       <map>
         <entry>
